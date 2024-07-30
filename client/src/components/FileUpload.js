@@ -24,7 +24,7 @@ const FileUpload = ({contract, account, provider}) =>{
                 name="data"
                 onChange={retrieveFile}
             />
-            <span className="textArea">Image:#soham.png</span>
+            <span className="textArea">Image:testimage.png</span>
             <button type="submit" className="upload">Upload File</button>
         </form>
     </div>
