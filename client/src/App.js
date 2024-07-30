@@ -51,6 +51,12 @@ function App() {
       <div class="bg"></div>
 
       <p>Account : {account ? account: "MetaMask Not Connected"}</p>
+
+      <FileUpload 
+      account = {account}
+      provider = {provider}
+      contract = {contract}
+      ></FileUpload>
     </div>
   );
 }
