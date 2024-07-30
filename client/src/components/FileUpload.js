@@ -5,9 +5,37 @@ import "./FileUpload.css";
 
 const FileUpload = ({contract, account, provider}) =>{
 
+    const [file, setFile] = useState(null);
+    const [fileName, setFileName] = useState("No image selected.");
 
     const handleSubmit = async (e) =>{
+        e.preventDefault();
+        if(file){
+            try{
+                const formData = new FormData();
+                formData("file", file);
 
+                const resFile = await axios({
+                    method: "post",
+                    url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+                    data: formData,
+                    headers: {
+                      pinata_api_key: process.env.PINATA_API_KEY,
+                      pinata_secret_api_key: process.env.PINATA_SECRET_API_KEY,
+                      "Content-Type": "multipart/form-data",
+                    },
+                  });
+                  const ImgHash = `ipfs://${resFile.data.IpfsHash}`;
+                //   const signer = contract.connect(provider.getSigner());
+                //   signer.add(account, ImgHash);
+                await contract.add(account, ImgHash);
+                alert("Successfully image uploaded.");
+                setFileName("No image selected");
+                setFile(null);
+            }catch(e){
+                alert("Unable to upload Image to Pinata");
+            }
+        }
     }
     const retrieveFile=()=>{
 
@@ -24,7 +52,7 @@ const FileUpload = ({contract, account, provider}) =>{
                 name="data"
                 onChange={retrieveFile}
             />
-            <span className="textArea">Image:testimage.png</span>
+            <span className="textArea">Image: {fileName}</span>
             <button type="submit" className="upload">Upload File</button>
         </form>
     </div>
