@@ -18,11 +18,19 @@ function App() {
 
     const loadProvider = async () =>{
       if(provider){
+        window.ethereum.on("ChainChanged", () => {
+          window.location.reload();
+        });
+
+        window.ethereum.on("accountsChanged", () => {
+          window.location.reload();
+        });
+
         await provider.send("eth_requestAccounts",[]);
         const signer = provider.getSigner();
         const address = await signer.getAddress();
         setAccount(address);
-        let contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3" //in this contract private key if you restart your terminal or anything else then you need to deploy this once more and that create a one more new pvt key copy this thing and pasted this into this line. also this is the command line we need to run this into the terminal " npx hardhat run --network localhost scripts/deploy.js"
+        let contractAddress = "0x5fbdb2315678afecb367f032d93f642f64180aa3" //in this contract private key if you restart your terminal or anything else then you need to deploy this once more and that create a one more new pvt key copy this thing and pasted this into this line. also this is the command line we need to run this into the terminal " npx hardhat run --network localhost scripts/deploy.js"
         const contract = new ethers.Contract(
           contractAddress, Upload.abi, signer
         );
@@ -39,7 +47,10 @@ function App() {
 
   return (
     <div className="App">
-      
+      <h1>SnapNode</h1>
+      <div class="bg"></div>
+
+      <p>Account : {account ? account: "MetaMask Not Connected"}</p>
     </div>
   );
 }
