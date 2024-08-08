@@ -37,9 +37,19 @@ const FileUpload = ({contract, account, provider}) =>{
             }
         }
     }
-    const retrieveFile=()=>{
 
-    }
+    const retrieveFile=(e)=>{
+        const data = e.target.files[0];
+        console.log(data);
+        const reader = new window.FileReader();
+        reader.readAsArrayBuffer(data);
+        reader.onload = ()=>{
+            setFile(e.target.files[0]);
+        }
+        setFileName(e.target.files[0].name);
+        e.preventDefault();
+    };
+
     return <div className="top">
         <form className="form" onSubmit={handleSubmit}>
             <label htmlFor="file-upload" className="choose">
